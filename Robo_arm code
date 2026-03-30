@@ -35,7 +35,7 @@ void loop() {
     // Read the character you typed
     char command = Serial.read();
 
-    // 1. ARM CONTROL (W = Up, S = Down)
+    // 1. ARM CONTROL (U = Up, S D= Down)
     if (command == 'd' || command == 'D') {
       if (armPos <= 170) { 
         armPos = armPos + 10; // Move 10 degrees
@@ -53,7 +53,7 @@ void loop() {
       }
     }
 
-    // 2. GRIPPER CONTROL (A = Open, D = Close)
+    // 2. GRIPPER CONTROL (O = Open, C = Close)
     else if (command == 'c' || command == 'C') {
       if (gripperPos <= 170) {
         gripperPos = gripperPos + 10;
