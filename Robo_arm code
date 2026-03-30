@@ -1,0 +1,74 @@
+#include <Servo.h>
+
+// Servo Objects
+Servo armServo;       // Attached to Pin 4
+Servo gripperServo;   // Attached to Pin 5
+
+// Starting positions (90 degrees is the safe middle point)
+int armPos = 90;      
+int gripperPos = 90;  
+
+void setup() {
+  // Start serial communication at 9600 baud
+  Serial.begin(9600);
+  
+  // Attach servos to their pins
+  armServo.attach(4);     
+  gripperServo.attach(5); 
+  
+  // Move servos to starting positions
+  armServo.write(armPos);
+  gripperServo.write(gripperPos);
+
+  // Print instructions to the screen
+  Serial.println("=== Robotic Arm Ready ===");
+  Serial.println("Type commands and press Enter:");
+  Serial.println("  U : Arm UP      |   D : Arm DOWN");
+  Serial.println("  O : Gripper OPEN|   C : Gripper CLOSE");
+  Serial.println("=========================");
+}
+
+void loop() {
+  // Check if you have typed something in the Serial Monitor
+  if (Serial.available() > 0) {
+    
+    // Read the character you typed
+    char command = Serial.read();
+
+    // 1. ARM CONTROL (W = Up, S = Down)
+    if (command == 'd' || command == 'D') {
+      if (armPos <= 170) { 
+        armPos = armPos + 10; // Move 10 degrees
+        armServo.write(armPos);
+        Serial.print("Arm moved UP to: ");
+        Serial.println(armPos);
+      }
+    } 
+    else if (command == 'u' || command == 'U') {
+      if (armPos >= 10) {
+        armPos = armPos - 10;
+        armServo.write(armPos);
+        Serial.print("Arm moved DOWN to: ");
+        Serial.println(armPos);
+      }
+    }
+
+    // 2. GRIPPER CONTROL (A = Open, D = Close)
+    else if (command == 'c' || command == 'C') {
+      if (gripperPos <= 170) {
+        gripperPos = gripperPos + 10;
+        gripperServo.write(gripperPos);
+        Serial.print("Gripper OPENED to: ");
+        Serial.println(gripperPos);
+      }
+    } 
+    else if (command == 'o' || command == 'O') {
+      if (gripperPos >= 10) {
+        gripperPos = gripperPos - 10;
+        gripperServo.write(gripperPos);
+        Serial.print("Gripper CLOSED to: ");
+        Serial.println(gripperPos);
+      }
+    }
+  }
+}
